@@ -1,0 +1,89 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tochka-postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: tochka-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_NAME: ${APP_NAME}
+      DEBUG: ${DEBUG}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      DEV_TELEGRAM_ID: ${DEV_TELEGRAM_ID}
+      DEV_TELEGRAM_USERNAME: ${DEV_TELEGRAM_USERNAME}
+      DEV_TELEGRAM_FIRST_NAME: ${DEV_TELEGRAM_FIRST_NAME}
+      DEV_TELEGRAM_LAST_NAME: ${DEV_TELEGRAM_LAST_NAME}
+      DEV_TELEGRAM_PHOTO_URL: ${DEV_TELEGRAM_PHOTO_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')\""
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: /api
+    container_name: tochka-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  admin-panel:
+    build:
+      context: ./admin-panel
+      args:
+        VITE_API_BASE: /api
+    container_name: tochka-admin
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: tochka-nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_PORT}:80"
+    depends_on:
+      - frontend
+      - admin-panel
+      - backend
+
+volumes:
+  postgres_data:
