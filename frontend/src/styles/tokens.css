@@ -1,0 +1,134 @@
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("/fonts/BebasNeue.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-heading: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
+  --font-title: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, Arial, sans-serif;
+
+  --fs-page-title: clamp(40px, 8vw, 74px);
+  --fs-page-subtitle: clamp(14px, 2.8vw, 18px);
+  --fs-card-title: clamp(15px, 3.8vw, 22px);
+  --fs-section-title: clamp(16px, 4vw, 24px);
+  --fs-time: clamp(14px, 2.8vw, 18px);
+  --fs-body: clamp(13px, 2.8vw, 16px);
+  --fs-meta: clamp(12px, 2.4vw, 14px);
+  --fs-pill: clamp(12px, 2.6vw, 14px);
+
+  --lh-page-title: 0.92;
+  --lh-card-title: 1.08;
+  --lh-body: 1.32;
+
+  --ls-page-title: 0;
+  --ls-card-title: -0.01em;
+  --ls-body: 0;
+}
+
+.page-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-page-title);
+  line-height: var(--lh-page-title);
+  letter-spacing: var(--ls-page-title);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-size: var(--fs-card-title);
+  line-height: var(--lh-card-title);
+  letter-spacing: var(--ls-card-title);
+  font-weight: 800;
+}
+
+.body-text {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  font-weight: 400;
+}
+
+.page-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--fs-page-subtitle);
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+.section-title-text {
+  font-family: var(--font-title);
+  font-size: var(--fs-section-title);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.meta-text {
+  font-family: var(--font-body);
+  font-size: var(--fs-meta);
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.pill-text,
+.button-text {
+  font-family: var(--font-title);
+  font-size: var(--fs-pill);
+  line-height: 1;
+  letter-spacing: 0;
+  font-weight: 700;
+}

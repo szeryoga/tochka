@@ -21,7 +21,7 @@ export function RegistrationsPage() {
         subtitle={settings?.my_registrations_page_subtitle ?? "Здесь все, на что ты записан"}
       />
       <section className="registrations-section">
-        <div className="section-title">
+        <div className="section-title registrations-section__title">
           <h2>Мои мероприятия</h2>
           <span>{data.events.length} записи</span>
         </div>
@@ -34,7 +34,7 @@ export function RegistrationsPage() {
         </div>
       </section>
       <section className="registrations-section">
-        <div className="section-title">
+        <div className="section-title registrations-section__title">
           <h2>Мои курсы</h2>
           <span>{data.courses.length} курса</span>
         </div>

@@ -14,7 +14,7 @@ export function CoursesPage() {
   }, []);
 
   return (
-    <>
+    <section className="courses-page">
       <PageHero
         title={settings?.courses_page_title ?? "Курсы"}
         subtitle={settings?.courses_page_subtitle ?? "Освой новые навыки и выступай увереннее"}
@@ -24,6 +24,6 @@ export function CoursesPage() {
           <CourseCard key={course.id} course={course} />
         ))}
       </section>
-    </>
+    </section>
   );
 }

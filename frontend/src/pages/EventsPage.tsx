@@ -14,16 +14,16 @@ export function EventsPage() {
   }, []);
 
   return (
-    <>
+    <section className="events-page">
       <PageHero
         title={settings?.events_page_title ?? "Мероприятия"}
         subtitle={settings?.events_page_subtitle ?? "Выбери событие и стань частью момента"}
       />
       <section className="stack-list">
-        {events.map((event) => (
-          <EventCard key={event.id} event={event} />
+        {events.map((event, index) => (
+          <EventCard key={event.id} event={event} index={index} />
         ))}
       </section>
-    </>
+    </section>
   );
 }

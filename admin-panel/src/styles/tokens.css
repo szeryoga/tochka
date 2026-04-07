@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap");
+
+:root {
+  --font-heading: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
+  --font-title: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, Arial, sans-serif;
+
+  --font-size-page-title: 2.4rem;
+  --font-size-section-title: 1.1rem;
+  --font-size-body: 1rem;
+  --font-size-meta: 0.92rem;
+
+  --letter-page-title: 0.025em;
+  --letter-section-title: 0.04em;
+
+  --color-bg: #0a0d12;
+  --color-panel: #131922;
+  --color-panel-strong: #10151d;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-muted: #92a0b3;
+  --color-accent: #24d6d6;
+  --color-danger: #d72846;
+
+  --radius-card: 20px;
+  --radius-control: 12px;
+}
