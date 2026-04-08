@@ -7,10 +7,24 @@ import { EventItem } from "../types";
 
 export function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const { settings } = useAppData();
 
   useEffect(() => {
-    void api.getEvents().then(setEvents);
+    void api
+      .getEvents()
+      .then((items) => {
+        setEvents(items);
+        setHasError(false);
+      })
+      .catch(() => {
+        setEvents([]);
+        setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (
@@ -19,11 +33,19 @@ export function EventsPage() {
         title={settings?.events_page_title ?? "Мероприятия"}
         subtitle={settings?.events_page_subtitle ?? "Выбери событие и стань частью момента"}
       />
-      <section className="stack-list">
-        {events.map((event, index) => (
-          <EventCard key={event.id} event={event} index={index} />
-        ))}
-      </section>
+      {hasError ? (
+        <div className="state-box">Не удалось загрузить мероприятия.</div>
+      ) : isLoading ? (
+        <div className="state-box">Загрузка...</div>
+      ) : events.length === 0 ? (
+        <div className="state-box">Пока нет опубликованных мероприятий.</div>
+      ) : (
+        <section className="stack-list">
+          {events.map((event, index) => (
+            <EventCard key={event.id} event={event} index={index} />
+          ))}
+        </section>
+      )}
     </section>
   );
 }

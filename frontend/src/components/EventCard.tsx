@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { EventItem } from "../types";
 import { ArrowIcon } from "./Icons";
-import { formatDayBadge } from "../utils/format";
+import { formatDayBadge, formatEventTime } from "../utils/format";
 
 interface EventCardProps {
   event: EventItem;
@@ -16,10 +16,7 @@ const eventPresets = [
 
 export function EventCard({ event, index }: EventCardProps) {
   const badge = formatDayBadge(event.event_datetime);
-  const time = new Date(event.event_datetime).toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
+  const time = formatEventTime(event.event_datetime);
   const preset = eventPresets[index % eventPresets.length];
 
   return (
