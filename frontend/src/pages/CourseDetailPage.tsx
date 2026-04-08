@@ -41,14 +41,6 @@ export function CourseDetailPage() {
         ← Назад
       </Link>
       <h1>{course.title}</h1>
-      <img className="detail-page__image" src={course.image_url} alt={course.title} />
-      <button className="cta-button" onClick={handleRegistration} type="button">
-        Записаться на курс
-      </button>
-      {status ? <div className="success-note">{status}</div> : null}
-      <div className="detail-page__panel">
-        <p>{course.full_description}</p>
-      </div>
       <div className="detail-page__panel detail-page__meta">
         <div className="detail-page__meta-icon">
           <GraduationIcon width={20} height={20} />
@@ -57,6 +49,14 @@ export function CourseDetailPage() {
           <span>Старт курса</span>
           <strong>{formatCourseDate(course.start_date)}</strong>
         </div>
+      </div>
+      <img className="detail-page__image" src={course.image_url} alt={course.title} />
+      <button className="cta-button" onClick={handleRegistration} type="button">
+        Записаться на курс
+      </button>
+      {status ? <div className="success-note">{status}</div> : null}
+      <div className="detail-page__panel">
+        <p>{course.full_description}</p>
       </div>
     </section>
   );

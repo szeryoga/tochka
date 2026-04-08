@@ -41,14 +41,6 @@ export function EventDetailPage() {
         ← Назад
       </Link>
       <h1>{event.title}</h1>
-      <img className="detail-page__image" src={event.image_url} alt={event.title} />
-      <button className="cta-button is-red" onClick={handleRegistration} type="button">
-        Записаться на мероприятие
-      </button>
-      {status ? <div className="success-note">{status}</div> : null}
-      <div className="detail-page__panel">
-        <p>{event.full_description}</p>
-      </div>
       <div className="detail-page__panel detail-page__meta">
         <div className="detail-page__meta-icon">
           <CalendarIcon width={20} height={20} />
@@ -57,6 +49,14 @@ export function EventDetailPage() {
           <span>Дата и время</span>
           <strong>{formatEventDate(event.event_datetime)}</strong>
         </div>
+      </div>
+      <img className="detail-page__image" src={event.image_url} alt={event.title} />
+      <button className="cta-button" onClick={handleRegistration} type="button">
+        Записаться на мероприятие
+      </button>
+      {status ? <div className="success-note">{status}</div> : null}
+      <div className="detail-page__panel">
+        <p>{event.full_description}</p>
       </div>
     </section>
   );
