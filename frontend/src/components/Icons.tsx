@@ -60,3 +60,31 @@ export function PhoneIcon(props: SVGProps<SVGSVGElement>) {
     </IconBase>
   );
 }
+
+export function TrashIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M9 4.5h6l.7 1.5H19" />
+      <path d="M6 6h12" />
+      <path d="M8 6l.7 12a2 2 0 0 0 2 1.8h2.6a2 2 0 0 0 2-1.8L16 6" />
+    </IconBase>
+  );
+}
+
+export function CloseIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </IconBase>
+  );
+}
+
+export function InfoIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 10v5" />
+      <circle cx="12" cy="7.5" r="0.8" fill="currentColor" stroke="none" />
+    </IconBase>
+  );
+}

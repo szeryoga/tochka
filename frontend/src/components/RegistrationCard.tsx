@@ -3,9 +3,10 @@ import { RegistrationItem } from "../types";
 
 interface RegistrationCardProps {
   item: RegistrationItem;
+  onCancel: (item: RegistrationItem) => void;
 }
 
-export function RegistrationCard({ item }: RegistrationCardProps) {
+export function RegistrationCard({ item, onCancel }: RegistrationCardProps) {
   const isEvent = item.entity_type === "event";
 
   return (
@@ -20,6 +21,9 @@ export function RegistrationCard({ item }: RegistrationCardProps) {
       </div>
       <div className="registration-card__status">
         <span>{isEvent ? "Записан" : "Активен"}</span>
+        <button className="registration-card__cancel" onClick={() => onCancel(item)} type="button">
+          Отменить
+        </button>
       </div>
     </div>
   );

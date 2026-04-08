@@ -15,6 +15,7 @@ from app.schemas.event import EventRead
 from app.schemas.profile import TelegramProfile, TelegramProfileUpsert
 from app.schemas.registration import (
     RegistrationCreate,
+    RegistrationDelete,
     RegistrationItem,
     RegistrationResponse,
     RegistrationsGrouped,
@@ -167,6 +168,29 @@ async def create_registration(
     await session.commit()
     await session.refresh(registration)
     return RegistrationResponse(status="created", registration_id=registration.id)
+
+
+@router.delete("/registrations", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_registration(
+    payload: RegistrationDelete,
+    session: AsyncSession = Depends(get_session),
+) -> None:
+    user = await session.scalar(select(User).where(User.telegram_id == payload.telegram_id))
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    registration = await session.scalar(
+        select(Registration).where(
+            Registration.user_id == user.id,
+            Registration.entity_type == payload.entity_type,
+            Registration.entity_id == payload.entity_id,
+        )
+    )
+    if not registration:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Registration not found")
+
+    await session.delete(registration)
+    await session.commit()
 
 
 @router.put("/profile", response_model=TelegramProfile)

@@ -13,6 +13,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(`API request failed: ${response.status}`);
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json() as Promise<T>;
 }
 
@@ -27,5 +31,10 @@ export const apiClient = {
     request<T>(path, {
       method: "PUT",
       body: JSON.stringify(body)
+    }),
+  delete: <T>(path: string, body?: unknown) =>
+    request<T>(path, {
+      method: "DELETE",
+      body: body ? JSON.stringify(body) : undefined
     })
 };

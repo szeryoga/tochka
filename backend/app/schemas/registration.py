@@ -20,6 +20,12 @@ class RegistrationResponse(BaseModel):
     registration_id: int
 
 
+class RegistrationDelete(BaseModel):
+    telegram_id: int
+    entity_type: RegistrationEntityType
+    entity_id: int
+
+
 class RegistrationItem(BaseModel):
     model_config = ConfigDict(from_attributes=False)
 
