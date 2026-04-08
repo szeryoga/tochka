@@ -395,6 +395,7 @@ button {
   line-height: 1;
   letter-spacing: 0;
   font-weight: 700;
+  cursor: pointer;
   color: #081113;
   background: linear-gradient(180deg, #38ebef, #0eb7c6);
 }
