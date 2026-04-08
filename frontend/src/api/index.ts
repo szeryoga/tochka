@@ -18,5 +18,6 @@ export const api = {
     apiClient.get<RegistrationsGrouped>(`/me/registrations?telegram_id=${telegramId}`),
   createRegistration: (payload: RegistrationPayload) =>
     apiClient.post<{ status: string; registration_id: number }>("/registrations", payload),
-  getTelegramDevProfile: () => apiClient.get<Profile>("/profile/telegram-dev")
+  getTelegramDevProfile: () => apiClient.get<Profile>("/profile/telegram-dev"),
+  upsertProfile: (payload: Profile) => apiClient.put<Profile>("/profile", payload)
 };

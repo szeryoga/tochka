@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, Integer, String
+from sqlalchemy import BigInteger, Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -14,3 +14,4 @@ class User(TimestampMixin, Base):
     first_name: Mapped[str] = mapped_column(String(128), nullable=False)
     last_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
     photo_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    notifications: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

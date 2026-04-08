@@ -559,6 +559,61 @@ button {
   font-weight: 700;
 }
 
+.profile-settings {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+}
+
+.profile-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.profile-toggle__slider {
+  position: relative;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background-color 0.2s ease;
+}
+
+.profile-toggle__slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.profile-toggle input:checked + .profile-toggle__slider {
+  background: rgba(49, 215, 222, 0.8);
+}
+
+.profile-toggle input:checked + .profile-toggle__slider::after {
+  transform: translateX(18px);
+}
+
 .state-box {
   padding: 18px;
   border-radius: 18px;

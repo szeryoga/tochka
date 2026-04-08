@@ -20,6 +20,11 @@ settings_obj = get_settings()
 async def lifespan(_: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await conn.execute(
+            text(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS notifications BOOLEAN NOT NULL DEFAULT TRUE"
+            )
+        )
 
     async with AsyncSessionLocal() as session:
         await seed_initial_data(session)

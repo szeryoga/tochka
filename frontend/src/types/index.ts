@@ -43,6 +43,7 @@ export interface Profile {
   first_name: string;
   last_name?: string | null;
   photo_url?: string | null;
+  notifications: boolean;
 }
 
 export interface RegistrationPayload {

@@ -12,7 +12,7 @@ from app.models.user import User
 from app.repositories.content import get_item_by_id, list_items
 from app.schemas.course import CourseRead
 from app.schemas.event import EventRead
-from app.schemas.profile import TelegramProfile
+from app.schemas.profile import TelegramProfile, TelegramProfileUpsert
 from app.schemas.registration import (
     RegistrationCreate,
     RegistrationItem,
@@ -138,6 +138,7 @@ async def create_registration(
             first_name=payload.first_name,
             last_name=payload.last_name,
             photo_url=payload.photo_url,
+            notifications=True,
         )
         session.add(user)
         await session.flush()
@@ -168,6 +169,35 @@ async def create_registration(
     return RegistrationResponse(status="created", registration_id=registration.id)
 
 
+@router.put("/profile", response_model=TelegramProfile)
+async def upsert_profile(
+    payload: TelegramProfileUpsert,
+    session: AsyncSession = Depends(get_session),
+) -> TelegramProfile:
+    user = await session.scalar(select(User).where(User.telegram_id == payload.telegram_id))
+    if not user:
+        user = User(
+            telegram_id=payload.telegram_id,
+            username=payload.username,
+            first_name=payload.first_name,
+            last_name=payload.last_name,
+            photo_url=payload.photo_url,
+            notifications=True if payload.notifications is None else payload.notifications,
+        )
+        session.add(user)
+    else:
+        user.username = payload.username
+        user.first_name = payload.first_name
+        user.last_name = payload.last_name
+        user.photo_url = payload.photo_url
+        if payload.notifications is not None:
+            user.notifications = payload.notifications
+
+    await session.commit()
+    await session.refresh(user)
+    return TelegramProfile.model_validate(user, from_attributes=True)
+
+
 @router.get("/profile/telegram-dev", response_model=TelegramProfile)
 async def get_dev_telegram_profile() -> TelegramProfile:
     settings = get_settings()
@@ -177,4 +207,5 @@ async def get_dev_telegram_profile() -> TelegramProfile:
         first_name=settings.dev_telegram_first_name,
         last_name=settings.dev_telegram_last_name,
         photo_url=settings.dev_telegram_photo_url,
+        notifications=True,
     )
