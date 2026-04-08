@@ -2,10 +2,9 @@
 set -eu
 
 APP_CERT="/etc/letsencrypt/live/${APP_DOMAIN}/fullchain.pem"
-ADMIN_CERT="/etc/letsencrypt/live/${ADMIN_DOMAIN}/fullchain.pem"
-API_CERT="/etc/letsencrypt/live/${API_DOMAIN}/fullchain.pem"
+APP_KEY="/etc/letsencrypt/live/${APP_DOMAIN}/privkey.pem"
 
-if [ -f "$APP_CERT" ] && [ -f "$ADMIN_CERT" ] && [ -f "$API_CERT" ]; then
+if [ -f "$APP_CERT" ] && [ -f "$APP_KEY" ]; then
   TEMPLATE="/etc/nginx/templates/default.conf.template"
   echo "Using HTTPS nginx config"
 else
