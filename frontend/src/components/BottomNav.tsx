@@ -24,7 +24,8 @@ export function BottomNav() {
           className={({ isActive }) => `bottom-nav__item${isActive ? " is-active" : ""}`}
           aria-label={label}
         >
-          <Icon width={24} height={24} />
+          <Icon width={20} height={20} />
+          <span className="bottom-nav__label">{label}</span>
         </NavLink>
       ))}
     </nav>
