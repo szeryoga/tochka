@@ -20,7 +20,6 @@ export function RegistrationCard({ item }: RegistrationCardProps) {
       </div>
       <div className="registration-card__status">
         <span>{isEvent ? "Записан" : "Активен"}</span>
-        <ArrowIcon width={18} height={18} />
       </div>
     </div>
   );
