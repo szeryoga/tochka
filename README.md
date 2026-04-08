@@ -70,7 +70,9 @@ Production-like MVP Telegram Mini App для школы импровизации
 │       └── utils
 ├── nginx
 │   ├── Dockerfile
-│   └── nginx.conf
+│   ├── acme.conf.template
+│   ├── default.conf.template
+│   └── docker-entrypoint.sh
 └── ref
 ```
 
@@ -94,6 +96,56 @@ docker compose up --build
 - admin panel: `http://localhost/admin/`
 - backend API: `http://localhost/api/`
 - healthcheck: `http://localhost/health`
+
+## HTTPS через Let's Encrypt
+
+1. Укажи реальные домены и e-mail в `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Заполни:
+
+- `APP_DOMAIN`
+- `ADMIN_DOMAIN`
+- `API_DOMAIN`
+- `LETSENCRYPT_EMAIL`
+
+2. Убедись, что все три домена уже смотрят на IP сервера и что порты `80` и `443` открыты.
+
+3. Запусти проект в bootstrap-режиме для ACME challenge:
+
+```bash
+docker compose up -d --build postgres backend frontend admin-panel nginx
+```
+
+На первом запуске `nginx` поднимется без TLS и будет обслуживать только `/.well-known/acme-challenge/` и редиректить остальное на HTTPS.
+
+4. Выпусти сертификаты:
+
+```bash
+docker compose run --rm --profile certbot certbot
+```
+
+5. Перезапусти `nginx`, чтобы он подхватил сертификаты и включил HTTPS-конфиг:
+
+```bash
+docker compose restart nginx
+```
+
+6. После этого сервисы будут доступны по адресам:
+
+- mini app: `https://${APP_DOMAIN}`
+- admin panel: `https://${ADMIN_DOMAIN}`
+- backend API: `https://${API_DOMAIN}`
+
+7. Обновление сертификатов:
+
+```bash
+docker compose run --rm --profile certbot certbot renew --webroot -w /var/www/certbot
+docker compose restart nginx
+```
 
 ## Что делает backend при старте
 

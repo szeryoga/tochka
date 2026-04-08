@@ -78,12 +78,43 @@ services:
       context: ./nginx
     container_name: tochka-nginx
     restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN}
     ports:
-      - "${NGINX_PORT}:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certbot_www:/var/www/certbot
+      - letsencrypt:/etc/letsencrypt
     depends_on:
       - frontend
       - admin-panel
       - backend
 
+  certbot:
+    image: certbot/certbot:latest
+    container_name: tochka-certbot
+    profiles: ["certbot"]
+    volumes:
+      - certbot_www:/var/www/certbot
+      - letsencrypt:/etc/letsencrypt
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - >
+        certbot certonly --webroot -w /var/www/certbot
+        -d ${APP_DOMAIN}
+        -d ${ADMIN_DOMAIN}
+        -d ${API_DOMAIN}
+        --email ${LETSENCRYPT_EMAIL}
+        --agree-tos
+        --no-eff-email
+        --non-interactive
+        --keep-until-expiring
+
 volumes:
   postgres_data:
+  certbot_www:
+  letsencrypt:
