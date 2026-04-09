@@ -13,11 +13,19 @@ def _format_course_date(value: date) -> str:
     return value.strftime("%d.%m.%Y")
 
 
+def _format_phone(phone: str) -> str:
+    digits = "".join(char for char in phone if char.isdigit())
+    if len(digits) == 11:
+        return f"{digits[0]}-{digits[1:4]}-{digits[4:7]}-{digits[7:]}"
+    return phone.strip()
+
+
 def _build_contacts_line(settings: AppSettings | None) -> str:
     if not settings:
         return "📍 Контакты школы уточняйте в миниаппе"
 
-    parts = [settings.contact_subtitle.strip(), settings.contact_phone.strip()]
+    phone = _format_phone(settings.contact_phone)
+    parts = [settings.contact_subtitle.strip(), f"тел. {phone}"]
     return f"📍 {' | '.join(part for part in parts if part)}"
 
 
