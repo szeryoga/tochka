@@ -3,6 +3,7 @@ import {
   CourseItem,
   EventItem,
   Profile,
+  ProfileUpsertPayload,
   RegistrationPayload,
   RegistrationsGrouped,
   Settings
@@ -21,5 +22,5 @@ export const api = {
   deleteRegistration: (payload: { telegram_id: number; entity_type: "event" | "course"; entity_id: number }) =>
     apiClient.delete<void>("/registrations", payload),
   getTelegramDevProfile: () => apiClient.get<Profile>("/profile/telegram-dev"),
-  upsertProfile: (payload: Profile) => apiClient.put<Profile>("/profile", payload)
+  upsertProfile: (payload: ProfileUpsertPayload) => apiClient.put<Profile>("/profile", payload)
 };

@@ -46,6 +46,15 @@ export interface Profile {
   notifications: boolean;
 }
 
+export interface ProfileUpsertPayload {
+  telegram_id: number;
+  username?: string | null;
+  first_name: string;
+  last_name?: string | null;
+  photo_url?: string | null;
+  notifications?: boolean;
+}
+
 export interface RegistrationPayload {
   telegram_id: number;
   username?: string | null;

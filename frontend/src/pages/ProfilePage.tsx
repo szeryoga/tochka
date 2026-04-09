@@ -16,8 +16,7 @@ export function ProfilePage() {
         username: profile.username,
         first_name: profile.first_name,
         last_name: profile.last_name,
-        photo_url: profile.photo_url,
-        notifications: profile.notifications
+        photo_url: profile.photo_url
       })
       .then((nextProfile) => {
         setNotifications(nextProfile.notifications);
