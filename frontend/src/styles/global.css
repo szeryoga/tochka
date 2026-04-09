@@ -471,8 +471,8 @@ button {
   color: #f5f7fb;
 }
 
-.teacher-panel__short,
-.teacher-panel__full {
+.teacher-panel .teacher-panel__short,
+.teacher-panel .teacher-panel__full {
   display: block;
   margin-top: 6px;
   color: #9598a4;
