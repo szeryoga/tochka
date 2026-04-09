@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.course import Course
 from app.models.event import Event
 from app.models.registration import Registration, RegistrationEntityType
+from app.models.settings import AppSettings
 from app.models.user import User
 from app.repositories.content import get_item_by_id
 from app.schemas.registration import RegistrationCreate, RegistrationResponse
@@ -98,10 +99,11 @@ async def create_registration_with_notification(
             message="Запись сохранена. Уведомления отключены в профиле.",
         )
 
+    app_settings = await session.scalar(select(AppSettings).limit(1))
     text = (
-        build_event_registration_text(entity)
+        build_event_registration_text(entity, app_settings)
         if payload.entity_type == RegistrationEntityType.event
-        else build_course_registration_text(entity)
+        else build_course_registration_text(entity, app_settings)
     )
     sender = TelegramBotSender()
     send_result = await sender.send_message(payload.telegram_id, text)
