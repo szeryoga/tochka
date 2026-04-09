@@ -27,6 +27,22 @@ async def lifespan(_: FastAPI):
         )
         await conn.execute(text("ALTER TABLE events ADD COLUMN IF NOT EXISTS teacher_id INTEGER"))
         await conn.execute(text("ALTER TABLE courses ADD COLUMN IF NOT EXISTS teacher_id INTEGER"))
+        await conn.execute(
+            text(
+                "ALTER TABLE events ADD COLUMN IF NOT EXISTS location VARCHAR(160) NOT NULL DEFAULT 'г. Санкт-Петербург'"
+            )
+        )
+        await conn.execute(
+            text(
+                "ALTER TABLE courses ADD COLUMN IF NOT EXISTS location VARCHAR(160) NOT NULL DEFAULT 'г. Санкт-Петербург'"
+            )
+        )
+        await conn.execute(
+            text("ALTER TABLE events ADD COLUMN IF NOT EXISTS available_slots INTEGER NOT NULL DEFAULT 12")
+        )
+        await conn.execute(
+            text("ALTER TABLE courses ADD COLUMN IF NOT EXISTS available_slots INTEGER NOT NULL DEFAULT 12")
+        )
 
     async with AsyncSessionLocal() as session:
         await seed_initial_data(session)

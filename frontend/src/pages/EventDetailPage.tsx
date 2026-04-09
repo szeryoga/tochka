@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAppData } from "../store/AppDataContext";
 import { EventItem } from "../types";
-import { BackArrowIcon, CalendarIcon } from "../components/Icons";
+import { BackArrowIcon, CalendarIcon, LocationIcon, SeatsIcon } from "../components/Icons";
 import { TeacherPanel } from "../components/TeacherPanel";
-import { formatEventDate } from "../utils/format";
+import { formatEventTime, formatShortDateLabel } from "../utils/format";
 
 export function EventDetailPage() {
   const { id } = useParams();
@@ -21,20 +21,32 @@ export function EventDetailPage() {
 
   const handleRegistration = async () => {
     if (!event || !profile) return;
-    const response = await api.createRegistration({
-      telegram_id: profile.telegram_id,
-      username: profile.username,
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      photo_url: profile.photo_url,
-      entity_type: "event",
-      entity_id: event.id
-    });
-    setStatus(
-      response.message ??
-        (response.status === "created" ? "Запись оформлена" : "Ты уже записан")
-    );
-    setBotHint(response.notification_sent === false ? "https://t.me/tochka_miniapp_bot" : "");
+    try {
+      const response = await api.createRegistration({
+        telegram_id: profile.telegram_id,
+        username: profile.username,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        photo_url: profile.photo_url,
+        entity_type: "event",
+        entity_id: event.id
+      });
+      setStatus(
+        response.message ??
+          (response.status === "created" ? "Запись оформлена" : "Ты уже записан")
+      );
+      setBotHint(response.notification_sent === false ? "https://t.me/tochka_miniapp_bot" : "");
+      if (response.status === "created") {
+        setEvent((current) =>
+          current
+            ? { ...current, available_slots: Math.max(0, current.available_slots - 1) }
+            : current
+        );
+      }
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Не удалось оформить запись");
+      setBotHint("");
+    }
   };
 
   if (!event) {
@@ -51,16 +63,35 @@ export function EventDetailPage() {
         </Link>
         <h1>{event.title}</h1>
       </div>
-      <div className="detail-page__panel detail-page__meta">
-        <div className="detail-page__meta-icon">
-          <CalendarIcon width={20} height={20} />
+      <div className="detail-page__hero-panel">
+        <div className="detail-page__hero-info">
+          <div className="detail-page__hero-row">
+            <div className="detail-page__meta-icon">
+              <CalendarIcon width={20} height={20} />
+            </div>
+            <div>
+              <span>Дата и время</span>
+              <strong>
+                {formatShortDateLabel(event.event_datetime)}, {formatEventTime(event.event_datetime)}
+              </strong>
+            </div>
+          </div>
+          <div className="detail-page__hero-row">
+            <div className="detail-page__meta-icon">
+              <LocationIcon width={20} height={20} />
+            </div>
+            <div>
+              <span>Место</span>
+              <strong>{event.location}</strong>
+            </div>
+          </div>
+          <div className="detail-page__slots">
+            <SeatsIcon width={17} height={17} />
+            <span>Осталось {event.available_slots} мест</span>
+          </div>
         </div>
-        <div>
-          <span>Дата и время</span>
-          <strong>{formatEventDate(event.event_datetime)}</strong>
-        </div>
+        <img className="detail-page__hero-image" src={event.image_url} alt={event.title} />
       </div>
-      <img className="detail-page__image" src={event.image_url} alt={event.title} />
       {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       <div className="detail-page__panel">
         <p>{event.full_description}</p>
@@ -81,8 +112,9 @@ export function EventDetailPage() {
           className="cta-button detail-page__cta-button"
           onClick={handleRegistration}
           type="button"
+          disabled={event.available_slots <= 0}
         >
-          Записаться на мероприятие
+          {event.available_slots > 0 ? "Записаться на мероприятие" : "Свободных мест нет"}
         </button>
       </div>
     </section>

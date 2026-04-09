@@ -165,6 +165,11 @@ async def delete_registration(
     if not registration:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Registration not found")
 
+    model = Event if payload.entity_type == RegistrationEntityType.event else Course
+    entity = await get_item_by_id(session, model, payload.entity_id)
+    if entity:
+        entity.available_slots += 1
+
     await session.delete(registration)
     await session.commit()
 

@@ -19,6 +19,8 @@ export interface EventItem {
   short_description: string;
   full_description: string;
   event_datetime: string;
+  location: string;
+  available_slots: number;
   image_url: string;
   teacher_id?: number | null;
   teacher?: Teacher | null;
@@ -33,6 +35,8 @@ export interface CourseItem {
   short_description: string;
   full_description: string;
   start_date: string;
+  location: string;
+  available_slots: number;
   image_url: string;
   teacher_id?: number | null;
   teacher?: Teacher | null;

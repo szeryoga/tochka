@@ -10,6 +10,8 @@ class EventBase(BaseModel):
     short_description: str
     full_description: str
     event_datetime: datetime
+    location: str
+    available_slots: int
     image_url: str
     teacher_id: int | None = None
     is_published: bool = True

@@ -8,6 +8,8 @@ const initialState = {
   short_description: "",
   full_description: "",
   start_date: "2026-05-01",
+  location: "г. Санкт-Петербург",
+  available_slots: 12,
   image_url: "",
   teacher_id: "",
   is_published: true
@@ -29,6 +31,8 @@ export function CourseFormPage() {
         short_description: item.short_description,
         full_description: item.full_description,
         start_date: item.start_date,
+        location: item.location,
+        available_slots: item.available_slots,
         image_url: item.image_url,
         teacher_id: item.teacher_id ? String(item.teacher_id) : "",
         is_published: item.is_published
@@ -89,6 +93,20 @@ export function CourseFormPage() {
             type="date"
             value={form.start_date}
             onChange={(e) => setForm({ ...form, start_date: e.target.value })}
+            required
+          />
+        </label>
+        <label>
+          Место проведения
+          <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} required />
+        </label>
+        <label>
+          Свободных мест
+          <input
+            type="number"
+            min="0"
+            value={form.available_slots}
+            onChange={(e) => setForm({ ...form, available_slots: Number(e.target.value) })}
             required
           />
         </label>

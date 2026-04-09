@@ -10,7 +10,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    let errorMessage = `API request failed: ${response.status}`;
+    try {
+      const errorBody = (await response.json()) as { detail?: string };
+      if (errorBody.detail) {
+        errorMessage = errorBody.detail;
+      }
+    } catch {
+      // Ignore non-JSON error bodies and keep the default message.
+    }
+    throw new Error(errorMessage);
   }
 
   if (response.status === 204) {

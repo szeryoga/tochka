@@ -43,6 +43,18 @@ export function formatCourseDate(dateString: string) {
   }).format(date);
 }
 
+export function formatShortDateLabel(dateString: string) {
+  const date = parseDate(dateString);
+  if (!date) {
+    return "Дата уточняется";
+  }
+
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "short"
+  }).format(date);
+}
+
 export function formatDayBadge(dateString: string) {
   const date = parseDate(dateString);
   if (!date) {

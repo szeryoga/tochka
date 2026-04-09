@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAppData } from "../store/AppDataContext";
 import { CourseItem } from "../types";
-import { BackArrowIcon, GraduationIcon } from "../components/Icons";
+import { BackArrowIcon, CalendarIcon, LocationIcon, SeatsIcon } from "../components/Icons";
 import { TeacherPanel } from "../components/TeacherPanel";
 import { formatCourseDate } from "../utils/format";
 
@@ -21,20 +21,32 @@ export function CourseDetailPage() {
 
   const handleRegistration = async () => {
     if (!course || !profile) return;
-    const response = await api.createRegistration({
-      telegram_id: profile.telegram_id,
-      username: profile.username,
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      photo_url: profile.photo_url,
-      entity_type: "course",
-      entity_id: course.id
-    });
-    setStatus(
-      response.message ??
-        (response.status === "created" ? "Запись оформлена" : "Ты уже записан")
-    );
-    setBotHint(response.notification_sent === false ? "https://t.me/tochka_miniapp_bot" : "");
+    try {
+      const response = await api.createRegistration({
+        telegram_id: profile.telegram_id,
+        username: profile.username,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        photo_url: profile.photo_url,
+        entity_type: "course",
+        entity_id: course.id
+      });
+      setStatus(
+        response.message ??
+          (response.status === "created" ? "Запись оформлена" : "Ты уже записан")
+      );
+      setBotHint(response.notification_sent === false ? "https://t.me/tochka_miniapp_bot" : "");
+      if (response.status === "created") {
+        setCourse((current) =>
+          current
+            ? { ...current, available_slots: Math.max(0, current.available_slots - 1) }
+            : current
+        );
+      }
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Не удалось оформить запись");
+      setBotHint("");
+    }
   };
 
   if (!course) {
@@ -51,16 +63,33 @@ export function CourseDetailPage() {
         </Link>
         <h1>{course.title}</h1>
       </div>
-      <div className="detail-page__panel detail-page__meta">
-        <div className="detail-page__meta-icon">
-          <GraduationIcon width={20} height={20} />
+      <div className="detail-page__hero-panel">
+        <div className="detail-page__hero-info">
+          <div className="detail-page__hero-row">
+            <div className="detail-page__meta-icon">
+              <CalendarIcon width={20} height={20} />
+            </div>
+            <div>
+              <span>Дата старта</span>
+              <strong>{formatCourseDate(course.start_date)}</strong>
+            </div>
+          </div>
+          <div className="detail-page__hero-row">
+            <div className="detail-page__meta-icon">
+              <LocationIcon width={20} height={20} />
+            </div>
+            <div>
+              <span>Место</span>
+              <strong>{course.location}</strong>
+            </div>
+          </div>
+          <div className="detail-page__slots">
+            <SeatsIcon width={17} height={17} />
+            <span>Осталось {course.available_slots} мест</span>
+          </div>
         </div>
-        <div>
-          <span>Старт курса</span>
-          <strong>{formatCourseDate(course.start_date)}</strong>
-        </div>
+        <img className="detail-page__hero-image" src={course.image_url} alt={course.title} />
       </div>
-      <img className="detail-page__image" src={course.image_url} alt={course.title} />
       {course.teacher ? <TeacherPanel teacher={course.teacher} /> : null}
       <div className="detail-page__panel">
         <p>{course.full_description}</p>
@@ -81,8 +110,9 @@ export function CourseDetailPage() {
           className="cta-button detail-page__cta-button"
           onClick={handleRegistration}
           type="button"
+          disabled={course.available_slots <= 0}
         >
-          Записаться на курс
+          {course.available_slots > 0 ? "Записаться на курс" : "Свободных мест нет"}
         </button>
       </div>
     </section>

@@ -97,3 +97,23 @@ export function InfoIcon(props: SVGProps<SVGSVGElement>) {
     </IconBase>
   );
 }
+
+export function LocationIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 20s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10Z" />
+      <circle cx="12" cy="10" r="2.2" />
+    </IconBase>
+  );
+}
+
+export function SeatsIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M7.5 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+      <path d="M16.5 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+      <path d="M4.5 17.5c.4-2.2 1.8-3.5 4-3.5h1.4c2.2 0 3.6 1.3 4 3.5" />
+      <path d="M13.5 17.5c.3-1.7 1.4-2.7 3.1-2.7h.3c1.6 0 2.7.9 3 2.7" />
+    </IconBase>
+  );
+}

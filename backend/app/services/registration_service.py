@@ -1,5 +1,6 @@
 import logging
 
+from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -47,9 +48,9 @@ async def create_registration_with_notification(
     model = Event if payload.entity_type == RegistrationEntityType.event else Course
     entity = await get_item_by_id(session, model, payload.entity_id)
     if not entity or not entity.is_published:
-        from fastapi import HTTPException, status
-
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
+    if entity.available_slots <= 0:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Свободных мест больше нет")
 
     user = await _upsert_user(session, payload)
 
@@ -79,6 +80,7 @@ async def create_registration_with_notification(
         entity_id=payload.entity_id,
     )
     session.add(registration)
+    entity.available_slots -= 1
     await session.commit()
     await session.refresh(registration)
 
@@ -88,6 +90,12 @@ async def create_registration_with_notification(
         payload.telegram_id,
         payload.entity_type.value,
         payload.entity_id,
+    )
+    logger.info(
+        "Available slots updated entity_type=%s entity_id=%s available_slots=%s",
+        payload.entity_type.value,
+        payload.entity_id,
+        entity.available_slots,
     )
 
     if not user.notifications:
