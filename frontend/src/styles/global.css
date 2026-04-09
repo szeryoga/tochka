@@ -379,7 +379,7 @@ button {
 
 .detail-page {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   padding-bottom: 172px;
 }
 
@@ -468,13 +468,13 @@ button {
 }
 
 .detail-page__panel {
-  padding: 16px;
+  padding: 14px;
 }
 
 .detail-page__meta {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .teacher-panel {
@@ -512,7 +512,7 @@ button {
 .teacher-panel .teacher-panel__short,
 .teacher-panel .teacher-panel__full {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   color: #9598a4;
   font-family: var(--font-body);
   font-size: var(--fs-body);
@@ -524,7 +524,7 @@ button {
 }
 
 .teacher-panel__full {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .teacher-panel__chevron {
@@ -541,7 +541,7 @@ button {
 
 .detail-page__meta strong {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   font-family: var(--font-title);
   font-size: var(--fs-time);
   line-height: 1;
