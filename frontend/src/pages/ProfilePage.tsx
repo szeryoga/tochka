@@ -5,7 +5,7 @@ import { UserIcon } from "../components/Icons";
 import { useAppData } from "../store/AppDataContext";
 
 export function ProfilePage() {
-  const { profile, settings } = useAppData();
+  const { profile, settings, setProfileState } = useAppData();
   const [notifications, setNotifications] = useState(true);
 
   useEffect(() => {
@@ -25,6 +25,7 @@ export function ProfilePage() {
       notifications: checked
     });
     setNotifications(nextProfile.notifications);
+    setProfileState(nextProfile);
   };
 
   return (

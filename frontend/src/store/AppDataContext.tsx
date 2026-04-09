@@ -16,6 +16,7 @@ interface AppDataContextValue {
   settings: Settings | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
+  setProfileState: (profile: Profile) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -53,7 +54,8 @@ export function AppDataProvider({ children }: PropsWithChildren) {
       profile,
       settings,
       loading,
-      refreshProfile
+      refreshProfile,
+      setProfileState: setProfile
     }),
     [loading, profile, refreshProfile, settings]
   );
