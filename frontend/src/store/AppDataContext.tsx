@@ -27,7 +27,14 @@ export function AppDataProvider({ children }: PropsWithChildren) {
 
   const refreshProfile = useCallback(async () => {
     const nextProfile = await getTelegramProfile();
-    setProfile(nextProfile);
+    const syncedProfile = await api.upsertProfile({
+      telegram_id: nextProfile.telegram_id,
+      username: nextProfile.username,
+      first_name: nextProfile.first_name,
+      last_name: nextProfile.last_name,
+      photo_url: nextProfile.photo_url
+    });
+    setProfile(syncedProfile);
   }, []);
 
   useEffect(() => {

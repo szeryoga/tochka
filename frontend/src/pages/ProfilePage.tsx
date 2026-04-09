@@ -10,17 +10,7 @@ export function ProfilePage() {
 
   useEffect(() => {
     if (!profile) return;
-    void api
-      .upsertProfile({
-        telegram_id: profile.telegram_id,
-        username: profile.username,
-        first_name: profile.first_name,
-        last_name: profile.last_name,
-        photo_url: profile.photo_url
-      })
-      .then((nextProfile) => {
-        setNotifications(nextProfile.notifications);
-      });
+    setNotifications(profile.notifications);
   }, [profile]);
 
   const handleNotificationsChange = async (checked: boolean) => {
