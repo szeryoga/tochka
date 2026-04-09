@@ -120,7 +120,7 @@ button {
   line-height: var(--lh-card-title);
   letter-spacing: var(--ls-card-title);
   font-weight: 800;
-  text-align: center;
+  text-align: left;
 }
 
 .body-text,
@@ -382,6 +382,18 @@ button {
   gap: 14px;
 }
 
+.detail-page__title-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+}
+
+.detail-page__title-row h1 {
+  margin: 0;
+  padding-top: 1px;
+}
+
 .button-text,
 .cta-button {
   border: 0;
@@ -517,6 +529,24 @@ button {
   border-radius: 14px;
   flex: 0 0 auto;
   background: rgba(49, 215, 222, 0.15);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-page__back-link {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+}
+
+.detail-page__back-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(49, 215, 222, 0.72);
+  background: transparent;
   color: var(--accent);
   display: flex;
   align-items: center;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAppData } from "../store/AppDataContext";
 import { EventItem } from "../types";
-import { CalendarIcon } from "../components/Icons";
+import { BackArrowIcon, CalendarIcon } from "../components/Icons";
 import { TeacherPanel } from "../components/TeacherPanel";
 import { formatEventDate } from "../utils/format";
 
@@ -43,7 +43,14 @@ export function EventDetailPage() {
 
   return (
     <section className="detail-page">
-      <h1>{event.title}</h1>
+      <div className="detail-page__title-row">
+        <Link className="detail-page__back-link" to="/">
+          <span className="detail-page__back-icon">
+            <BackArrowIcon width={20} height={20} />
+          </span>
+        </Link>
+        <h1>{event.title}</h1>
+      </div>
       <div className="detail-page__panel detail-page__meta">
         <div className="detail-page__meta-icon">
           <CalendarIcon width={20} height={20} />
