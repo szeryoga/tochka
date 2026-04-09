@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from app.schemas.teacher import TeacherRead
+
 
 class EventBase(BaseModel):
     title: str
@@ -9,6 +11,7 @@ class EventBase(BaseModel):
     full_description: str
     event_datetime: datetime
     image_url: str
+    teacher_id: int | None = None
     is_published: bool = True
 
 
@@ -24,5 +27,6 @@ class EventRead(EventBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    teacher: TeacherRead | None = None
     created_at: datetime
     updated_at: datetime

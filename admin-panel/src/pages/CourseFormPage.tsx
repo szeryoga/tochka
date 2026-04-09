@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
+import { Teacher } from "../types";
 
 const initialState = {
   title: "",
@@ -8,6 +9,7 @@ const initialState = {
   full_description: "",
   start_date: "2026-05-01",
   image_url: "",
+  teacher_id: "",
   is_published: true
 };
 
@@ -15,8 +17,10 @@ export function CourseFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
 
   useEffect(() => {
+    void api.getTeachers().then(setTeachers);
     if (!id || id === "new") return;
     void api.getCourse(Number(id)).then((item) => {
       if (!item) return;
@@ -26,6 +30,7 @@ export function CourseFormPage() {
         full_description: item.full_description,
         start_date: item.start_date,
         image_url: item.image_url,
+        teacher_id: item.teacher_id ? String(item.teacher_id) : "",
         is_published: item.is_published
       });
     });
@@ -34,10 +39,15 @@ export function CourseFormPage() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
+    const payload = {
+      ...form,
+      teacher_id: form.teacher_id ? Number(form.teacher_id) : null
+    };
+
     if (id && id !== "new") {
-      await api.updateCourse(Number(id), form);
+      await api.updateCourse(Number(id), payload);
     } else {
-      await api.createCourse(form);
+      await api.createCourse(payload);
     }
 
     navigate("/courses");
@@ -90,6 +100,17 @@ export function CourseFormPage() {
             onChange={(e) => setForm({ ...form, image_url: e.target.value })}
             required
           />
+        </label>
+        <label>
+          Ведущий
+          <select value={form.teacher_id} onChange={(e) => setForm({ ...form, teacher_id: e.target.value })}>
+            <option value="">Не выбран</option>
+            {teachers.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.full_name}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="checkbox">
           <input

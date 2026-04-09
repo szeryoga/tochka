@@ -1,4 +1,4 @@
-import { CourseItem, EventItem, Settings } from "../types";
+import { CourseItem, EventItem, Settings, Teacher } from "../types";
 import { apiClient } from "./client";
 
 export const api = {
@@ -21,6 +21,16 @@ export const api = {
   updateCourse: (id: number, payload: Omit<CourseItem, "id">) =>
     apiClient.put<CourseItem>(`/admin/courses/${id}`, payload),
   deleteCourse: (id: number) => apiClient.delete(`/admin/courses/${id}`),
+  getTeachers: () => apiClient.get<Teacher[]>("/admin/teachers"),
+  getTeacher: async (id: number) => {
+    const teachers = await apiClient.get<Teacher[]>("/admin/teachers");
+    return teachers.find((item) => item.id === id) ?? null;
+  },
+  createTeacher: (payload: Omit<Teacher, "id" | "full_name">) =>
+    apiClient.post<Teacher>("/admin/teachers", payload),
+  updateTeacher: (id: number, payload: Omit<Teacher, "id" | "full_name">) =>
+    apiClient.put<Teacher>(`/admin/teachers/${id}`, payload),
+  deleteTeacher: (id: number) => apiClient.delete(`/admin/teachers/${id}`),
   getSettings: () => apiClient.get<Settings>("/admin/settings"),
   updateSettings: (payload: Omit<Settings, "id" | "updated_at">) =>
     apiClient.put<Settings>("/admin/settings", payload)

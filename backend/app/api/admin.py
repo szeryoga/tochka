@@ -6,13 +6,65 @@ from app.api.deps import get_session
 from app.models.course import Course
 from app.models.event import Event
 from app.models.settings import AppSettings
+from app.models.teacher import Teacher
 from app.repositories.content import get_item_by_id, list_items
 from app.schemas.course import CourseCreate, CourseRead, CourseUpdate
 from app.schemas.event import EventCreate, EventRead, EventUpdate
 from app.schemas.settings import SettingsRead, SettingsUpdate
+from app.schemas.teacher import TeacherCreate, TeacherRead, TeacherUpdate
 
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+
+@router.get("/teachers", response_model=list[TeacherRead])
+async def admin_get_teachers(session: AsyncSession = Depends(get_session)) -> list[Teacher]:
+    result = await session.execute(select(Teacher).order_by(Teacher.last_name.asc(), Teacher.first_name.asc()))
+    return list(result.scalars().all())
+
+
+@router.post("/teachers", response_model=TeacherRead, status_code=status.HTTP_201_CREATED)
+async def admin_create_teacher(payload: TeacherCreate, session: AsyncSession = Depends(get_session)) -> Teacher:
+    teacher = Teacher(**payload.model_dump())
+    session.add(teacher)
+    await session.commit()
+    await session.refresh(teacher)
+    return teacher
+
+
+@router.put("/teachers/{teacher_id}", response_model=TeacherRead)
+async def admin_update_teacher(
+    teacher_id: int,
+    payload: TeacherUpdate,
+    session: AsyncSession = Depends(get_session),
+) -> Teacher:
+    teacher = await session.get(Teacher, teacher_id)
+    if not teacher:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Teacher not found")
+
+    for field, value in payload.model_dump().items():
+        setattr(teacher, field, value)
+    await session.commit()
+    await session.refresh(teacher)
+    return teacher
+
+
+@router.delete("/teachers/{teacher_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def admin_delete_teacher(teacher_id: int, session: AsyncSession = Depends(get_session)) -> Response:
+    teacher = await session.get(Teacher, teacher_id)
+    if not teacher:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Teacher not found")
+
+    events = (await session.execute(select(Event).where(Event.teacher_id == teacher_id))).scalars().all()
+    courses = (await session.execute(select(Course).where(Course.teacher_id == teacher_id))).scalars().all()
+    for event in events:
+        event.teacher_id = None
+    for course in courses:
+        course.teacher_id = None
+
+    await session.delete(teacher)
+    await session.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get("/events", response_model=list[EventRead])

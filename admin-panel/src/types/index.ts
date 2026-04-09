@@ -5,6 +5,8 @@ export interface EventItem {
   full_description: string;
   event_datetime: string;
   image_url: string;
+  teacher_id?: number | null;
+  teacher?: Teacher | null;
   is_published: boolean;
 }
 
@@ -15,7 +17,19 @@ export interface CourseItem {
   full_description: string;
   start_date: string;
   image_url: string;
+  teacher_id?: number | null;
+  teacher?: Teacher | null;
   is_published: boolean;
+}
+
+export interface Teacher {
+  id: number;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  short_bio: string;
+  full_bio: string;
+  photo_url: string;
 }
 
 export interface Settings {

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 const items = [
   { to: "/events", label: "Мероприятия" },
   { to: "/courses", label: "Курсы" },
+  { to: "/teachers", label: "Ведущие" },
   { to: "/settings", label: "Настройки" }
 ];
 

@@ -9,7 +9,7 @@ from app.api.public import router as public_router
 from app.core.config import get_settings
 from app.db.base import Base
 from app.db.session import AsyncSessionLocal, engine
-from app.models import course, event, registration, settings, user  # noqa: F401
+from app.models import course, event, registration, settings, teacher, user  # noqa: F401
 from app.services.seed import seed_initial_data
 
 
@@ -25,6 +25,8 @@ async def lifespan(_: FastAPI):
                 "ALTER TABLE users ADD COLUMN IF NOT EXISTS notifications BOOLEAN NOT NULL DEFAULT TRUE"
             )
         )
+        await conn.execute(text("ALTER TABLE events ADD COLUMN IF NOT EXISTS teacher_id INTEGER"))
+        await conn.execute(text("ALTER TABLE courses ADD COLUMN IF NOT EXISTS teacher_id INTEGER"))
 
     async with AsyncSessionLocal() as session:
         await seed_initial_data(session)

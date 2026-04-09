@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
+import { Teacher } from "../types";
 
 const initialState = {
   title: "",
@@ -8,6 +9,7 @@ const initialState = {
   full_description: "",
   event_datetime: "2026-05-01T19:00",
   image_url: "",
+  teacher_id: "",
   is_published: true
 };
 
@@ -15,8 +17,10 @@ export function EventFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
 
   useEffect(() => {
+    void api.getTeachers().then(setTeachers);
     if (!id || id === "new") return;
     void api.getEvent(Number(id)).then((item) => {
       if (!item) return;
@@ -26,6 +30,7 @@ export function EventFormPage() {
         full_description: item.full_description,
         event_datetime: item.event_datetime.slice(0, 16),
         image_url: item.image_url,
+        teacher_id: item.teacher_id ? String(item.teacher_id) : "",
         is_published: item.is_published
       });
     });
@@ -35,7 +40,8 @@ export function EventFormPage() {
     event.preventDefault();
     const payload = {
       ...form,
-      event_datetime: new Date(form.event_datetime).toISOString()
+      event_datetime: new Date(form.event_datetime).toISOString(),
+      teacher_id: form.teacher_id ? Number(form.teacher_id) : null
     };
 
     if (id && id !== "new") {
@@ -94,6 +100,17 @@ export function EventFormPage() {
             onChange={(e) => setForm({ ...form, image_url: e.target.value })}
             required
           />
+        </label>
+        <label>
+          Ведущий
+          <select value={form.teacher_id} onChange={(e) => setForm({ ...form, teacher_id: e.target.value })}>
+            <option value="">Не выбран</option>
+            {teachers.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.full_name}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="checkbox">
           <input

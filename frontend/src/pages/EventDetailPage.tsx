@@ -4,6 +4,7 @@ import { api } from "../api";
 import { useAppData } from "../store/AppDataContext";
 import { EventItem } from "../types";
 import { CalendarIcon } from "../components/Icons";
+import { TeacherPanel } from "../components/TeacherPanel";
 import { formatEventDate } from "../utils/format";
 
 export function EventDetailPage() {
@@ -59,6 +60,7 @@ export function EventDetailPage() {
       <button className="cta-button" onClick={handleRegistration} type="button">
         Записаться на мероприятие
       </button>
+      {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       {status ? <div className="success-note">{status}</div> : null}
       {botHint ? (
         <a className="bot-link-note" href={botHint} target="_blank" rel="noreferrer">

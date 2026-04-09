@@ -8,6 +8,7 @@ from app.models.course import Course
 from app.models.event import Event
 from app.models.registration import Registration, RegistrationEntityType
 from app.models.settings import AppSettings
+from app.models.teacher import Teacher
 from app.models.user import User
 from app.repositories.content import get_item_by_id, list_items
 from app.schemas.course import CourseRead
@@ -21,6 +22,7 @@ from app.schemas.registration import (
     RegistrationsGrouped,
 )
 from app.schemas.settings import SettingsRead
+from app.schemas.teacher import TeacherRead
 from app.services.registration_service import create_registration_with_notification
 
 
@@ -58,6 +60,20 @@ async def get_course(course_id: int, session: AsyncSession = Depends(get_session
     if not course or not course.is_published:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
     return course
+
+
+@router.get("/teachers", response_model=list[TeacherRead])
+async def get_teachers(session: AsyncSession = Depends(get_session)) -> list[Teacher]:
+    result = await session.execute(select(Teacher).order_by(Teacher.last_name.asc(), Teacher.first_name.asc()))
+    return list(result.scalars().all())
+
+
+@router.get("/teachers/{teacher_id}", response_model=TeacherRead)
+async def get_teacher(teacher_id: int, session: AsyncSession = Depends(get_session)) -> Teacher:
+    teacher = await session.get(Teacher, teacher_id)
+    if not teacher:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Teacher not found")
+    return teacher
 
 
 @router.get("/me/registrations", response_model=RegistrationsGrouped)
