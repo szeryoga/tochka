@@ -378,10 +378,8 @@ button {
 
 .back-link {
   display: inline-flex;
-  align-items: center;
   flex: 0 0 auto;
   color: var(--accent);
-  font-family: var(--font-body);
 }
 
 .detail-page {
@@ -391,7 +389,7 @@ button {
 
 .detail-page__title-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -539,6 +537,10 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.detail-page__back-icon {
+  margin-top: 0;
 }
 
 .registrations-section {

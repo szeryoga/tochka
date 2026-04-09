@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAppData } from "../store/AppDataContext";
 import { CourseItem } from "../types";
-import { GraduationIcon } from "../components/Icons";
+import { BackArrowIcon, GraduationIcon } from "../components/Icons";
 import { TeacherPanel } from "../components/TeacherPanel";
 import { formatCourseDate } from "../utils/format";
 
@@ -45,7 +45,9 @@ export function CourseDetailPage() {
     <section className="detail-page">
       <div className="detail-page__title-row">
         <Link className="back-link" to="/courses">
-          ← Назад
+          <span className="detail-page__meta-icon detail-page__back-icon">
+            <BackArrowIcon width={20} height={20} />
+          </span>
         </Link>
         <h1>{course.title}</h1>
       </div>

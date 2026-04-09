@@ -53,6 +53,15 @@ export function ArrowIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function BackArrowIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M18 12H6" />
+      <path d="m11 7-5 5 5 5" />
+    </IconBase>
+  );
+}
+
 export function PhoneIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBase {...props}>
