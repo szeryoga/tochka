@@ -380,7 +380,7 @@ button {
 .detail-page {
   display: grid;
   gap: 10px;
-  padding-top: 104px;
+  padding-top: 92px;
   padding-bottom: 172px;
 }
 
@@ -987,7 +987,7 @@ button {
   }
 
   .detail-page {
-    padding-top: 96px;
+    padding-top: 88px;
     padding-bottom: 164px;
   }
 
