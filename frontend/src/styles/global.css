@@ -380,7 +380,7 @@ button {
 .detail-page {
   display: grid;
   gap: 10px;
-  padding-top: 64px;
+  padding-top: 84px;
   padding-bottom: 172px;
 }
 
@@ -394,9 +394,10 @@ button {
   top: 18px;
   transform: translateX(-50%);
   width: min(calc(100% - 32px), calc(var(--page-width) - 32px));
+  min-height: 60px;
   z-index: 12;
-  padding: 0 0 8px;
-  background: linear-gradient(180deg, rgba(21, 21, 24, 0.98), rgba(21, 21, 24, 0.88) 72%, rgba(21, 21, 24, 0));
+  padding: 0 0 14px;
+  background: linear-gradient(180deg, rgba(21, 21, 24, 1), rgba(21, 21, 24, 0.98) 78%, rgba(21, 21, 24, 0.94) 100%);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -985,7 +986,7 @@ button {
   }
 
   .detail-page {
-    padding-top: 60px;
+    padding-top: 80px;
     padding-bottom: 164px;
   }
 
@@ -997,6 +998,8 @@ button {
   .detail-page__title-row {
     top: 18px;
     width: min(calc(100% - 24px), calc(var(--page-width) - 24px));
+    min-height: 56px;
+    padding-bottom: 12px;
   }
 
   .content-card,
