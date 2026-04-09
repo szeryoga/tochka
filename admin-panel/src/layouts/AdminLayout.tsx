@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { AdminErrorBoundary } from "../components/AdminErrorBoundary";
 import { Sidebar } from "../components/Sidebar";
 
 export function AdminLayout() {
@@ -6,7 +7,9 @@ export function AdminLayout() {
     <div className="admin-shell">
       <Sidebar />
       <main className="admin-content">
-        <Outlet />
+        <AdminErrorBoundary>
+          <Outlet />
+        </AdminErrorBoundary>
       </main>
     </div>
   );
