@@ -376,26 +376,9 @@ button {
   line-height: 1.2;
 }
 
-.back-link {
-  display: inline-flex;
-  flex: 0 0 auto;
-  color: var(--accent);
-}
-
 .detail-page {
   display: grid;
   gap: 14px;
-}
-
-.detail-page__title-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.detail-page__title-row h1 {
-  margin: 0;
-  min-width: 0;
 }
 
 .button-text,
@@ -539,9 +522,6 @@ button {
   justify-content: center;
 }
 
-.detail-page__back-icon {
-  margin-top: 0;
-}
 
 .registrations-section {
   margin-top: 8px;
