@@ -380,6 +380,7 @@ button {
 .detail-page {
   display: grid;
   gap: 10px;
+  padding-top: 64px;
   padding-bottom: 172px;
 }
 
@@ -388,10 +389,13 @@ button {
   grid-template-columns: 44px minmax(0, 1fr);
   align-items: start;
   gap: 14px;
-  position: sticky;
-  top: 0;
-  z-index: 9;
-  padding: 2px 0 8px;
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  transform: translateX(-50%);
+  width: min(calc(100% - 32px), calc(var(--page-width) - 32px));
+  z-index: 12;
+  padding: 0 0 8px;
   background: linear-gradient(180deg, rgba(21, 21, 24, 0.98), rgba(21, 21, 24, 0.88) 72%, rgba(21, 21, 24, 0));
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -981,12 +985,18 @@ button {
   }
 
   .detail-page {
+    padding-top: 60px;
     padding-bottom: 164px;
   }
 
   .detail-page__cta-bar {
     width: min(calc(100% - 24px), calc(var(--page-width) - 24px));
     bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .detail-page__title-row {
+    top: 18px;
+    width: min(calc(100% - 24px), calc(var(--page-width) - 24px));
   }
 
   .content-card,
