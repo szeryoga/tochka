@@ -97,6 +97,10 @@ button {
   overflow-x: hidden;
 }
 
+.app-content--detail {
+  padding-top: 18px;
+}
+
 .page-title,
 .page-hero h1,
 .detail-page h1 {
@@ -373,8 +377,9 @@ button {
 }
 
 .back-link {
-  display: inline-block;
-  margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
   color: var(--accent);
   font-family: var(--font-body);
 }
@@ -382,6 +387,17 @@ button {
 .detail-page {
   display: grid;
   gap: 14px;
+}
+
+.detail-page__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detail-page__title-row h1 {
+  margin: 0;
+  min-width: 0;
 }
 
 .button-text,

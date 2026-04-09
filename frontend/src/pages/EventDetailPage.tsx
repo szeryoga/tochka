@@ -43,10 +43,12 @@ export function EventDetailPage() {
 
   return (
     <section className="detail-page">
-      <Link className="back-link" to="/">
-        ← Назад
-      </Link>
-      <h1>{event.title}</h1>
+      <div className="detail-page__title-row">
+        <Link className="back-link" to="/">
+          ← Назад
+        </Link>
+        <h1>{event.title}</h1>
+      </div>
       <div className="detail-page__panel detail-page__meta">
         <div className="detail-page__meta-icon">
           <CalendarIcon width={20} height={20} />
@@ -56,11 +58,11 @@ export function EventDetailPage() {
           <strong>{formatEventDate(event.event_datetime)}</strong>
         </div>
       </div>
+      {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       <img className="detail-page__image" src={event.image_url} alt={event.title} />
       <button className="cta-button" onClick={handleRegistration} type="button">
         Записаться на мероприятие
       </button>
-      {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       {status ? <div className="success-note">{status}</div> : null}
       {botHint ? (
         <a className="bot-link-note" href={botHint} target="_blank" rel="noreferrer">
