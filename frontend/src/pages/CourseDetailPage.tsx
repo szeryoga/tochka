@@ -62,17 +62,28 @@ export function CourseDetailPage() {
       </div>
       {course.teacher ? <TeacherPanel teacher={course.teacher} /> : null}
       <img className="detail-page__image" src={course.image_url} alt={course.title} />
-      <button className="cta-button" onClick={handleRegistration} type="button">
-        Записаться на курс
-      </button>
-      {status ? <div className="success-note">{status}</div> : null}
-      {botHint ? (
-        <a className="bot-link-note" href={botHint} target="_blank" rel="noreferrer">
-          Открыть бота @tochka_miniapp_bot
-        </a>
-      ) : null}
       <div className="detail-page__panel">
         <p>{course.full_description}</p>
+      </div>
+      <div className="detail-page__cta-bar">
+        {status ? <div className="success-note detail-page__success-note">{status}</div> : null}
+        {botHint ? (
+          <a
+            className="bot-link-note detail-page__bot-link-note"
+            href={botHint}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Открыть бота @tochka_miniapp_bot
+          </a>
+        ) : null}
+        <button
+          className="cta-button detail-page__cta-button"
+          onClick={handleRegistration}
+          type="button"
+        >
+          Записаться на курс
+        </button>
       </div>
     </section>
   );

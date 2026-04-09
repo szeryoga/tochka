@@ -380,6 +380,7 @@ button {
 .detail-page {
   display: grid;
   gap: 14px;
+  padding-bottom: 172px;
 }
 
 .detail-page__title-row {
@@ -392,6 +393,33 @@ button {
 .detail-page__title-row h1 {
   margin: 0;
   padding-top: 1px;
+}
+
+.detail-page__cta-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(calc(100% - 24px), calc(var(--page-width) - 24px));
+  z-index: 10;
+  display: grid;
+  gap: 8px;
+}
+
+.detail-page__cta-button,
+.detail-page__success-note,
+.detail-page__bot-link-note {
+  width: 100%;
+}
+
+.detail-page__cta-button {
+  min-height: 56px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+}
+
+.detail-page__success-note,
+.detail-page__bot-link-note {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
 .button-text,
@@ -943,6 +971,15 @@ button {
   .page-hero p {
     max-width: 100%;
     font-size: var(--fs-body);
+  }
+
+  .detail-page {
+    padding-bottom: 164px;
+  }
+
+  .detail-page__cta-bar {
+    width: min(calc(100% - 24px), calc(var(--page-width) - 24px));
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px));
   }
 
   .content-card,
