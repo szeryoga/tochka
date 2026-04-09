@@ -467,11 +467,15 @@ button {
   min-width: 0;
 }
 
+.teacher-panel__content strong {
+  color: #f5f7fb;
+}
+
 .teacher-panel__short,
 .teacher-panel__full {
   display: block;
   margin-top: 6px;
-  color: var(--muted);
+  color: #9598a4;
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
