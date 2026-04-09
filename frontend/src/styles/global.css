@@ -446,8 +446,8 @@ button {
   margin-top: 6px;
   color: #f5f7fb;
   font-family: var(--font-title);
-  font-size: clamp(18px, 3.8vw, 24px);
-  line-height: 1.05;
+  font-size: var(--fs-card-title);
+  line-height: var(--lh-card-title);
   letter-spacing: var(--ls-card-title);
   font-weight: 800;
 }
