@@ -120,6 +120,7 @@ button {
   line-height: var(--lh-card-title);
   letter-spacing: var(--ls-card-title);
   font-weight: 800;
+  text-align: center;
 }
 
 .body-text,
