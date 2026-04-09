@@ -60,8 +60,8 @@ export function EventDetailPage() {
           <strong>{formatEventDate(event.event_datetime)}</strong>
         </div>
       </div>
-      {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       <img className="detail-page__image" src={event.image_url} alt={event.title} />
+      {event.teacher ? <TeacherPanel teacher={event.teacher} /> : null}
       <div className="detail-page__panel">
         <p>{event.full_description}</p>
       </div>

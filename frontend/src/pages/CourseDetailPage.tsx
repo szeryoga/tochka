@@ -60,8 +60,8 @@ export function CourseDetailPage() {
           <strong>{formatCourseDate(course.start_date)}</strong>
         </div>
       </div>
-      {course.teacher ? <TeacherPanel teacher={course.teacher} /> : null}
       <img className="detail-page__image" src={course.image_url} alt={course.title} />
+      {course.teacher ? <TeacherPanel teacher={course.teacher} /> : null}
       <div className="detail-page__panel">
         <p>{course.full_description}</p>
       </div>
