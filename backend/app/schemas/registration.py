@@ -18,6 +18,9 @@ class RegistrationCreate(BaseModel):
 class RegistrationResponse(BaseModel):
     status: str
     registration_id: int
+    notification_sent: bool | None = None
+    notification_error_code: int | None = None
+    message: str | None = None
 
 
 class RegistrationDelete(BaseModel):

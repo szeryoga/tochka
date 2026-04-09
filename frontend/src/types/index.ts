@@ -65,6 +65,14 @@ export interface RegistrationPayload {
   entity_id: number;
 }
 
+export interface RegistrationResponse {
+  status: string;
+  registration_id: number;
+  notification_sent?: boolean | null;
+  notification_error_code?: number | null;
+  message?: string | null;
+}
+
 export interface RegistrationItem {
   id: number;
   entity_type: "event" | "course";

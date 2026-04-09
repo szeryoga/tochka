@@ -11,6 +11,7 @@ export function CourseDetailPage() {
   const { profile } = useAppData();
   const [course, setCourse] = useState<CourseItem | null>(null);
   const [status, setStatus] = useState<string>("");
+  const [botHint, setBotHint] = useState<string>("");
 
   useEffect(() => {
     if (!id) return;
@@ -28,7 +29,11 @@ export function CourseDetailPage() {
       entity_type: "course",
       entity_id: course.id
     });
-    setStatus(response.status === "created" ? "Запись оформлена" : "Ты уже записан");
+    setStatus(
+      response.message ??
+        (response.status === "created" ? "Запись оформлена" : "Ты уже записан")
+    );
+    setBotHint(response.notification_sent === false ? "https://t.me/tochka_miniapp_bot" : "");
   };
 
   if (!course) {
@@ -55,6 +60,11 @@ export function CourseDetailPage() {
         Записаться на курс
       </button>
       {status ? <div className="success-note">{status}</div> : null}
+      {botHint ? (
+        <a className="bot-link-note" href={botHint} target="_blank" rel="noreferrer">
+          Открыть бота @tochka_miniapp_bot
+        </a>
+      ) : null}
       <div className="detail-page__panel">
         <p>{course.full_description}</p>
       </div>

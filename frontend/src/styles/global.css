@@ -413,6 +413,22 @@ button {
   font-family: var(--font-body);
 }
 
+.bot-link-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #d7dbe3;
+  font-family: var(--font-title);
+  font-size: var(--fs-meta);
+  line-height: 1;
+  font-weight: 700;
+}
+
 .detail-page__panel {
   padding: 16px;
 }

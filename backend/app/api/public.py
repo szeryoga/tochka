@@ -21,6 +21,7 @@ from app.schemas.registration import (
     RegistrationsGrouped,
 )
 from app.schemas.settings import SettingsRead
+from app.services.registration_service import create_registration_with_notification
 
 
 router = APIRouter(tags=["public"])
@@ -126,48 +127,7 @@ async def create_registration(
     payload: RegistrationCreate,
     session: AsyncSession = Depends(get_session),
 ) -> RegistrationResponse:
-    model = Event if payload.entity_type == RegistrationEntityType.event else Course
-    entity = await get_item_by_id(session, model, payload.entity_id)
-    if not entity or not entity.is_published:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
-
-    user = await session.scalar(select(User).where(User.telegram_id == payload.telegram_id))
-    if not user:
-        user = User(
-            telegram_id=payload.telegram_id,
-            username=payload.username,
-            first_name=payload.first_name,
-            last_name=payload.last_name,
-            photo_url=payload.photo_url,
-            notifications=True,
-        )
-        session.add(user)
-        await session.flush()
-    else:
-        user.username = payload.username
-        user.first_name = payload.first_name
-        user.last_name = payload.last_name
-        user.photo_url = payload.photo_url
-
-    existing = await session.scalar(
-        select(Registration).where(
-            Registration.user_id == user.id,
-            Registration.entity_type == payload.entity_type,
-            Registration.entity_id == payload.entity_id,
-        )
-    )
-    if existing:
-        return RegistrationResponse(status="already_registered", registration_id=existing.id)
-
-    registration = Registration(
-        user_id=user.id,
-        entity_type=payload.entity_type,
-        entity_id=payload.entity_id,
-    )
-    session.add(registration)
-    await session.commit()
-    await session.refresh(registration)
-    return RegistrationResponse(status="created", registration_id=registration.id)
+    return await create_registration_with_notification(session, payload)
 
 
 @router.delete("/registrations", status_code=status.HTTP_204_NO_CONTENT)

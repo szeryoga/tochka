@@ -5,6 +5,7 @@ import {
   Profile,
   ProfileUpsertPayload,
   RegistrationPayload,
+  RegistrationResponse,
   RegistrationsGrouped,
   Settings
 } from "../types";
@@ -18,7 +19,7 @@ export const api = {
   getRegistrations: (telegramId: number) =>
     apiClient.get<RegistrationsGrouped>(`/me/registrations?telegram_id=${telegramId}`),
   createRegistration: (payload: RegistrationPayload) =>
-    apiClient.post<{ status: string; registration_id: number }>("/registrations", payload),
+    apiClient.post<RegistrationResponse>("/registrations", payload),
   deleteRegistration: (payload: { telegram_id: number; entity_type: "event" | "course"; entity_id: number }) =>
     apiClient.delete<void>("/registrations", payload),
   getTelegramDevProfile: () => apiClient.get<Profile>("/profile/telegram-dev"),

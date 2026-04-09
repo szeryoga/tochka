@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     dev_telegram_photo_url: str = Field(
         default="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=320&q=80"
     )
+    telegram_bot_token: str = Field(default="")
+    telegram_bot_username: str = Field(default="tochka_miniapp_bot")
+    telegram_notifications_enabled: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
         env_file=".env",
