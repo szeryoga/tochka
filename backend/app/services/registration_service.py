@@ -49,8 +49,6 @@ async def create_registration_with_notification(
     entity = await get_item_by_id(session, model, payload.entity_id)
     if not entity or not entity.is_published:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
-    if entity.available_slots <= 0:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Свободных мест больше нет")
 
     user = await _upsert_user(session, payload)
 
@@ -73,6 +71,9 @@ async def create_registration_with_notification(
             registration_id=existing.id,
             notification_sent=None,
         )
+
+    if entity.available_slots <= 0:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Свободных мест больше нет")
 
     registration = Registration(
         user_id=user.id,

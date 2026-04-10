@@ -11,6 +11,7 @@ class CourseBase(BaseModel):
     full_description: str
     start_date: date
     location: str
+    total_places: int
     available_slots: int
     image_url: str
     teacher_id: int | None = None

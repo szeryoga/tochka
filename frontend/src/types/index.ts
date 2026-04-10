@@ -20,6 +20,7 @@ export interface EventItem {
   full_description: string;
   event_datetime: string;
   location: string;
+  total_places: number;
   available_slots: number;
   image_url: string;
   teacher_id?: number | null;
@@ -36,6 +37,7 @@ export interface CourseItem {
   full_description: string;
   start_date: string;
   location: string;
+  total_places: number;
   available_slots: number;
   image_url: string;
   teacher_id?: number | null;

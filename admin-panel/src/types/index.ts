@@ -5,6 +5,7 @@ export interface EventItem {
   full_description: string;
   event_datetime: string;
   location: string;
+  total_places: number;
   available_slots: number;
   image_url: string;
   teacher_id?: number | null;
@@ -19,6 +20,7 @@ export interface CourseItem {
   full_description: string;
   start_date: string;
   location: string;
+  total_places: number;
   available_slots: number;
   image_url: string;
   teacher_id?: number | null;
@@ -49,4 +51,24 @@ export interface Settings {
   my_registrations_page_title: string;
   my_registrations_page_subtitle: string;
   updated_at: string;
+}
+
+export interface RegistrationSummary {
+  id: number;
+  title: string;
+  presenter_name: string;
+  participants_count: number;
+  free_places: number;
+  total_places: number;
+}
+
+export interface RegisteredUser {
+  user_id: number;
+  full_name: string;
+  telegram_username?: string | null;
+  registered_at: string;
+}
+
+export interface RegistrationDetail extends RegistrationSummary {
+  registrations: RegisteredUser[];
 }

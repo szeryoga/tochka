@@ -85,6 +85,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     event_datetime=datetime(2026, 4, 29, 19, 0, tzinfo=timezone.utc),
                     location="Барселона",
+                    total_places=12,
                     available_slots=12,
                     image_url="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[1].id if len(teachers) > 1 else None,
@@ -99,6 +100,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     event_datetime=datetime(2026, 4, 30, 15, 0, tzinfo=timezone.utc),
                     location="г. Санкт-Петербург",
+                    total_places=8,
                     available_slots=8,
                     image_url="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[0].id if teachers else None,
@@ -113,6 +115,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     event_datetime=datetime(2026, 5, 5, 18, 30, tzinfo=timezone.utc),
                     location="г. Санкт-Петербург",
+                    total_places=15,
                     available_slots=15,
                     image_url="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[2].id if len(teachers) > 2 else None,
@@ -134,6 +137,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     start_date=date(2026, 5, 12),
                     location="г. Санкт-Петербург",
+                    total_places=14,
                     available_slots=14,
                     image_url="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[1].id if len(teachers) > 1 else None,
@@ -148,6 +152,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     start_date=date(2026, 5, 19),
                     location="г. Санкт-Петербург",
+                    total_places=10,
                     available_slots=10,
                     image_url="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[2].id if len(teachers) > 2 else None,
@@ -162,6 +167,7 @@ async def seed_initial_data(session: AsyncSession) -> None:
                     ),
                     start_date=date(2026, 6, 2),
                     location="г. Санкт-Петербург",
+                    total_places=16,
                     available_slots=16,
                     image_url="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
                     teacher_id=teachers[1].id if len(teachers) > 1 else None,
@@ -182,7 +188,9 @@ async def seed_initial_data(session: AsyncSession) -> None:
         for index, event in enumerate(events):
             if not event.location:
                 event.location = "Барселона" if index == 0 else "г. Санкт-Петербург"
-            if event.available_slots is None or event.available_slots <= 0:
+            if event.total_places is None:
+                event.total_places = [12, 8, 15][index] if index < 3 else 12
+            if event.available_slots is None:
                 event.available_slots = [12, 8, 15][index] if index < 3 else 12
 
         if len(courses) > 0 and courses[0].teacher_id is None and len(teachers) > 1:
@@ -194,7 +202,9 @@ async def seed_initial_data(session: AsyncSession) -> None:
         for index, course in enumerate(courses):
             if not course.location:
                 course.location = "г. Санкт-Петербург"
-            if course.available_slots is None or course.available_slots <= 0:
+            if course.total_places is None:
+                course.total_places = [14, 10, 16][index] if index < 3 else 12
+            if course.available_slots is None:
                 course.available_slots = [14, 10, 16][index] if index < 3 else 12
 
     await session.commit()

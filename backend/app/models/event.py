@@ -16,6 +16,7 @@ class Event(TimestampMixin, Base):
     full_description: Mapped[str] = mapped_column(Text, nullable=False)
     event_datetime: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     location: Mapped[str] = mapped_column(String(160), nullable=False, default="г. Санкт-Петербург")
+    total_places: Mapped[int] = mapped_column(Integer, nullable=False, default=12)
     available_slots: Mapped[int] = mapped_column(Integer, nullable=False, default=12)
     image_url: Mapped[str] = mapped_column(String(500), nullable=False)
     teacher_id: Mapped[int | None] = mapped_column(ForeignKey("teachers.id"), nullable=True)

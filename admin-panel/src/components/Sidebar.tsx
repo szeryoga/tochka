@@ -4,6 +4,7 @@ const items = [
   { to: "/events", label: "Мероприятия" },
   { to: "/courses", label: "Курсы" },
   { to: "/teachers", label: "Ведущие" },
+  { to: "/registrations", label: "Записи" },
   { to: "/settings", label: "Настройки" }
 ];
 

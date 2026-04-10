@@ -11,6 +11,7 @@ class EventBase(BaseModel):
     full_description: str
     event_datetime: datetime
     location: str
+    total_places: int
     available_slots: int
     image_url: str
     teacher_id: int | None = None

@@ -1,4 +1,4 @@
-import { CourseItem, EventItem, Settings, Teacher } from "../types";
+import { CourseItem, EventItem, RegistrationDetail, RegistrationSummary, Settings, Teacher } from "../types";
 import { apiClient } from "./client";
 
 export const api = {
@@ -31,6 +31,14 @@ export const api = {
   updateTeacher: (id: number, payload: Omit<Teacher, "id" | "full_name">) =>
     apiClient.put<Teacher>(`/admin/teachers/${id}`, payload),
   deleteTeacher: (id: number) => apiClient.delete(`/admin/teachers/${id}`),
+  getEventRegistrationSummary: () =>
+    apiClient.get<RegistrationSummary[]>("/admin/registrations/events"),
+  getCourseRegistrationSummary: () =>
+    apiClient.get<RegistrationSummary[]>("/admin/registrations/courses"),
+  getEventRegistrationDetail: (id: number) =>
+    apiClient.get<RegistrationDetail>(`/admin/registrations/events/${id}`),
+  getCourseRegistrationDetail: (id: number) =>
+    apiClient.get<RegistrationDetail>(`/admin/registrations/courses/${id}`),
   getSettings: () => apiClient.get<Settings>("/admin/settings"),
   updateSettings: (payload: Omit<Settings, "id" | "updated_at">) =>
     apiClient.put<Settings>("/admin/settings", payload)
