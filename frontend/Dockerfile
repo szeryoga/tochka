@@ -9,7 +9,9 @@ COPY public ./public
 COPY src ./src
 
 ARG VITE_API_BASE=/api
+ARG VITE_APP_BASE=/app/
 ENV VITE_API_BASE=${VITE_API_BASE}
+ENV VITE_APP_BASE=${VITE_APP_BASE}
 
 RUN npm run build
 

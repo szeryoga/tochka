@@ -7,5 +7,5 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5174
   },
-  base: "/admin/"
+  base: process.env.VITE_ADMIN_BASE || "/admin/"
 });

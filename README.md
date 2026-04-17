@@ -92,14 +92,14 @@ docker compose up --build
 
 3. После старта сервисы доступны по адресам:
 
-- mini app: `http://localhost/`
+- mini app: `http://localhost/app/`
 - admin panel: `http://localhost/admin/`
 - backend API: `http://localhost/api/`
 - healthcheck: `http://localhost/health`
 
 ## HTTPS через Let's Encrypt
 
-1. Укажи реальные домены и e-mail в `.env`:
+1. Укажи реальный домен и e-mail в `.env`:
 
 ```bash
 cp .env.example .env
@@ -108,11 +108,12 @@ cp .env.example .env
 Заполни:
 
 - `APP_DOMAIN`
-- `ADMIN_DOMAIN`
-- `API_DOMAIN`
+- `APP_BASE_PATH`
+- `ADMIN_BASE_PATH`
+- `API_BASE_PATH`
 - `LETSENCRYPT_EMAIL`
 
-2. Убедись, что все три домена уже смотрят на IP сервера и что порты `80` и `443` открыты.
+2. Убедись, что домен уже смотрит на IP сервера и что порты `80` и `443` открыты.
 
 3. Запусти проект в bootstrap-режиме для ACME challenge:
 
@@ -125,7 +126,7 @@ docker compose up -d --build postgres backend frontend admin-panel nginx
 4. Выпусти сертификаты:
 
 ```bash
-docker compose run --rm --profile certbot certbot
+docker compose --profile certbot run --rm certbot
 ```
 
 5. Перезапусти `nginx`, чтобы он подхватил сертификаты и включил HTTPS-конфиг:
@@ -136,14 +137,14 @@ docker compose restart nginx
 
 6. После этого сервисы будут доступны по адресам:
 
-- mini app: `https://${APP_DOMAIN}`
-- admin panel: `https://${ADMIN_DOMAIN}`
-- backend API: `https://${API_DOMAIN}`
+- mini app: `https://${APP_DOMAIN}${APP_BASE_PATH}/`
+- admin panel: `https://${APP_DOMAIN}${ADMIN_BASE_PATH}/`
+- backend API: `https://${APP_DOMAIN}${API_BASE_PATH}/`
 
 7. Обновление сертификатов:
 
 ```bash
-docker compose run --rm --profile certbot certbot renew --webroot -w /var/www/certbot
+docker compose --profile certbot run --rm certbot renew --webroot -w /var/www/certbot
 docker compose restart nginx
 ```
 
@@ -214,7 +215,7 @@ Alembic пока не используется по ТЗ.
 
 - mini app сверстан под мобильный экран с фиксированной верхней шапкой и нижним таббаром
 - reverse proxy на `nginx` маршрутизирует:
-  - `/` -> `frontend`
+  - `/app` -> `frontend`
   - `/admin` -> `admin-panel`
   - `/api` -> `backend`
 - для первого запуска на Ubuntu достаточно Docker и Docker Compose plugin

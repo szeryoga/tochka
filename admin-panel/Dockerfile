@@ -8,7 +8,9 @@ RUN npm install
 COPY src ./src
 
 ARG VITE_API_BASE=/api
+ARG VITE_ADMIN_BASE=/admin/
 ENV VITE_API_BASE=${VITE_API_BASE}
+ENV VITE_ADMIN_BASE=${VITE_ADMIN_BASE}
 
 RUN npm run build
 

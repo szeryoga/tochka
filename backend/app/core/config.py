@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     postgres_port: int = Field(default=5432)
 
     backend_port: int = Field(default=8000)
-    frontend_origin: str = Field(default="http://localhost")
+    frontend_origin: str = Field(default="http://localhost/app")
     admin_origin: str = Field(default="http://localhost/admin")
     cors_origins: str = Field(default="http://localhost,http://127.0.0.1")
 
