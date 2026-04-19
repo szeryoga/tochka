@@ -58,7 +58,8 @@ services:
     build:
       context: ./frontend
       args:
-        VITE_API_BASE: https://${API_DOMAIN}/api
+        VITE_API_BASE: ${API_BASE_PATH}
+        VITE_APP_BASE: ${APP_BASE_PATH}/
     container_name: tochka-frontend
     restart: unless-stopped
     depends_on:
@@ -69,7 +70,8 @@ services:
     build:
       context: ./admin-panel
       args:
-        VITE_API_BASE: https://${API_DOMAIN}/api
+        VITE_API_BASE: ${API_BASE_PATH}
+        VITE_ADMIN_BASE: ${ADMIN_BASE_PATH}/
     container_name: tochka-admin
     restart: unless-stopped
     depends_on:
@@ -83,8 +85,9 @@ services:
     restart: unless-stopped
     environment:
       APP_DOMAIN: ${APP_DOMAIN}
-      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
-      API_DOMAIN: ${API_DOMAIN}
+      APP_BASE_PATH: ${APP_BASE_PATH}
+      ADMIN_BASE_PATH: ${ADMIN_BASE_PATH}
+      API_BASE_PATH: ${API_BASE_PATH}
     ports:
       - "80:80"
       - "443:443"
@@ -109,8 +112,6 @@ services:
       - >
         certbot certonly --webroot -w /var/www/certbot
         -d ${APP_DOMAIN}
-        -d ${ADMIN_DOMAIN}
-        -d ${API_DOMAIN}
         --email ${LETSENCRYPT_EMAIL}
         --agree-tos
         --no-eff-email

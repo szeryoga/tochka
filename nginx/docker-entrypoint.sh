@@ -12,7 +12,7 @@ else
   echo "Certificates not found, using ACME bootstrap config"
 fi
 
-envsubst '${APP_DOMAIN} ${ADMIN_DOMAIN} ${API_DOMAIN}' \
+envsubst '${APP_DOMAIN} ${APP_BASE_PATH} ${ADMIN_BASE_PATH} ${API_BASE_PATH}' \
   < "$TEMPLATE" \
   > /etc/nginx/conf.d/default.conf
 

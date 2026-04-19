@@ -2,6 +2,15 @@
 
 Production-like MVP Telegram Mini App для школы импровизации "Точка" в виде монорепозитория с Docker Compose.
 
+Текущая схема маршрутизации:
+
+- один hostname: `APP_DOMAIN`
+- mini app: `${APP_BASE_PATH}`
+- admin panel: `${ADMIN_BASE_PATH}`
+- backend API: `${API_BASE_PATH}`
+
+Важно: путь не хранится в `APP_DOMAIN`. `APP_DOMAIN` — это только hostname для TLS, nginx и certbot.
+
 ## Состав
 
 - `frontend/` — Telegram Mini App на React + TypeScript + Vite
@@ -92,7 +101,7 @@ docker compose up --build
 
 3. После старта сервисы доступны по адресам:
 
-- mini app: `http://localhost/`
+- mini app: `http://localhost/app/`
 - admin panel: `http://localhost/admin/`
 - backend API: `http://localhost/api/`
 - healthcheck: `http://localhost/health`
@@ -108,11 +117,12 @@ cp .env.example .env
 Заполни:
 
 - `APP_DOMAIN`
-- `ADMIN_DOMAIN`
-- `API_DOMAIN`
+- `APP_BASE_PATH`
+- `ADMIN_BASE_PATH`
+- `API_BASE_PATH`
 - `LETSENCRYPT_EMAIL`
 
-2. Убедись, что все три домена уже смотрят на IP сервера и что порты `80` и `443` открыты.
+2. Убедись, что домен `APP_DOMAIN` уже смотрит на IP сервера и что порты `80` и `443` открыты.
 
 3. Запусти проект в bootstrap-режиме для ACME challenge:
 
@@ -136,9 +146,9 @@ docker compose restart nginx
 
 6. После этого сервисы будут доступны по адресам:
 
-- mini app: `https://${APP_DOMAIN}`
-- admin panel: `https://${ADMIN_DOMAIN}`
-- backend API: `https://${API_DOMAIN}`
+- mini app: `https://${APP_DOMAIN}${APP_BASE_PATH}/`
+- admin panel: `https://${APP_DOMAIN}${ADMIN_BASE_PATH}/`
+- backend API: `https://${APP_DOMAIN}${API_BASE_PATH}/`
 
 7. Обновление сертификатов:
 
@@ -180,6 +190,14 @@ Alembic пока не используется по ТЗ.
 - `POST /api/admin/courses`
 - `PUT /api/admin/courses/{id}`
 - `DELETE /api/admin/courses/{id}`
+- `GET /api/admin/teachers`
+- `POST /api/admin/teachers`
+- `PUT /api/admin/teachers/{id}`
+- `DELETE /api/admin/teachers/{id}`
+- `GET /api/admin/registrations/events`
+- `GET /api/admin/registrations/courses`
+- `GET /api/admin/registrations/events/{event_id}`
+- `GET /api/admin/registrations/courses/{course_id}`
 - `GET /api/admin/settings`
 - `PUT /api/admin/settings`
 
@@ -214,7 +232,7 @@ Alembic пока не используется по ТЗ.
 
 - mini app сверстан под мобильный экран с фиксированной верхней шапкой и нижним таббаром
 - reverse proxy на `nginx` маршрутизирует:
-  - `/` -> `frontend`
+  - `/app` -> `frontend`
   - `/admin` -> `admin-panel`
   - `/api` -> `backend`
 - для первого запуска на Ubuntu достаточно Docker и Docker Compose plugin
@@ -229,6 +247,10 @@ Alembic пока не используется по ТЗ.
 - `POSTGRES_HOST`
 - `POSTGRES_PORT`
 - `NGINX_PORT`
+- `APP_DOMAIN`
+- `APP_BASE_PATH`
+- `ADMIN_BASE_PATH`
+- `API_BASE_PATH`
 - `CORS_ORIGINS`
 - `DEV_TELEGRAM_*`
 
