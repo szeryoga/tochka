@@ -11,12 +11,25 @@ Production-like MVP Telegram Mini App для школы импровизации
 
 Важно: путь не хранится в `APP_DOMAIN`. `APP_DOMAIN` — это только hostname для TLS, nginx и certbot.
 
+Для production используется внешний gateway-проект. Этот репозиторий поднимает только:
+
+- `postgres`
+- `backend`
+- `frontend`
+- `admin-panel`
+
+Внешний gateway подключается к общей Docker-сети `GATEWAY_NETWORK` и маршрутизирует трафик на:
+
+- `http://tochka-frontend:80`
+- `http://tochka-admin:80`
+- `http://tochka-backend:8000`
+
 ## Состав
 
 - `frontend/` — Telegram Mini App на React + TypeScript + Vite
 - `admin-panel/` — админка на React + TypeScript + Vite
 - `backend/` — FastAPI + SQLAlchemy + Pydantic
-- `nginx/` — reverse proxy для frontend, admin и API
+- `nginx/` — legacy reverse proxy, код сохранён, но по умолчанию не используется
 - `postgres` — база данных PostgreSQL 16
 - `ref/` — локальные дизайн-референсы и исходный логотип
 
@@ -93,68 +106,50 @@ Production-like MVP Telegram Mini App для школы импровизации
 cp .env.example .env
 ```
 
-2. Подними проект:
+2. Для production через внешний gateway подними проект:
 
 ```bash
-docker compose up --build
+./scripts/prod-up.sh
 ```
 
-3. После старта сервисы доступны по адресам:
+3. После старта gateway должен маршрутизировать трафик на:
 
-- mini app: `http://localhost/app/`
-- admin panel: `http://localhost/admin/`
-- backend API: `http://localhost/api/`
-- healthcheck: `http://localhost/health`
+- `http://tochka-frontend:80`
+- `http://tochka-admin:80`
+- `http://tochka-backend:8000`
 
-## HTTPS через Let's Encrypt
+4. Пример gateway routing:
 
-1. Укажи реальный домен и e-mail в `.env`:
-
-```bash
-cp .env.example .env
+```yaml
+domains:
+  - host: tochka.etalonfood.com
+    routes:
+      - path: /app
+        upstream: http://tochka-frontend:80
+      - path: /admin
+        upstream: http://tochka-admin:80
+      - path: /api
+        upstream: http://tochka-backend:8000
 ```
 
-Заполни:
-
-- `APP_DOMAIN`
-- `APP_BASE_PATH`
-- `ADMIN_BASE_PATH`
-- `API_BASE_PATH`
-- `LETSENCRYPT_EMAIL`
-
-2. Убедись, что домен `APP_DOMAIN` уже смотрит на IP сервера и что порты `80` и `443` открыты.
-
-3. Запусти проект в bootstrap-режиме для ACME challenge:
+5. Для локальных браузерных тестов без gateway используй:
 
 ```bash
-docker compose up -d --build postgres backend frontend admin-panel nginx
+./scripts/local-dev.sh
 ```
 
-На первом запуске `nginx` поднимется без TLS и будет обслуживать только `/.well-known/acme-challenge/` и редиректить остальное на HTTPS.
+## Legacy `nginx` / `certbot`
 
-4. Выпусти сертификаты:
+Встроенные `nginx` и `certbot` сохранены в репозитории, но по умолчанию не запускаются. Они оставлены только как legacy-вариант.
+
+Если всё-таки нужен старый встроенный режим:
 
 ```bash
-docker compose --profile certbot run --rm certbot
+docker compose --profile legacy-gateway up -d nginx
 ```
 
-5. Перезапусти `nginx`, чтобы он подхватил сертификаты и включил HTTPS-конфиг:
-
 ```bash
-docker compose restart nginx
-```
-
-6. После этого сервисы будут доступны по адресам:
-
-- mini app: `https://${APP_DOMAIN}${APP_BASE_PATH}/`
-- admin panel: `https://${APP_DOMAIN}${ADMIN_BASE_PATH}/`
-- backend API: `https://${APP_DOMAIN}${API_BASE_PATH}/`
-
-7. Обновление сертификатов:
-
-```bash
-docker compose --profile certbot run --rm certbot renew --webroot -w /var/www/certbot
-docker compose restart nginx
+docker compose --profile legacy-gateway --profile certbot run --rm certbot
 ```
 
 ## Что делает backend при старте
@@ -231,10 +226,11 @@ Alembic пока не используется по ТЗ.
 ## Полезные замечания
 
 - mini app сверстан под мобильный экран с фиксированной верхней шапкой и нижним таббаром
-- reverse proxy на `nginx` маршрутизирует:
-  - `/app` -> `frontend`
-  - `/admin` -> `admin-panel`
-  - `/api` -> `backend`
+- production gateway должен быть подключён к сети `GATEWAY_NETWORK`
+- в этой сети сервисы доступны по именам:
+  - `tochka-frontend`
+  - `tochka-admin`
+  - `tochka-backend`
 - для первого запуска на Ubuntu достаточно Docker и Docker Compose plugin
 
 ## Переменные окружения
@@ -251,7 +247,6 @@ Alembic пока не используется по ТЗ.
 - `APP_BASE_PATH`
 - `ADMIN_BASE_PATH`
 - `API_BASE_PATH`
+- `GATEWAY_NETWORK`
 - `CORS_ORIGINS`
 - `DEV_TELEGRAM_*`
-
-Если меняешь порт публикации nginx, меняй `NGINX_PORT` в `.env`.
