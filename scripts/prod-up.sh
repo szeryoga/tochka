@@ -4,13 +4,14 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-if [[ -f .env ]]; then
-  set -a
-  source .env
-  set +a
-fi
+GATEWAY_NETWORK_NAME="gateway-net"
 
-GATEWAY_NETWORK_NAME="${GATEWAY_NETWORK:-gateway-net}"
+if [[ -f .env ]]; then
+  GATEWAY_NETWORK_FROM_ENV="$(grep -E '^GATEWAY_NETWORK=' .env | tail -n 1 | cut -d'=' -f2- || true)"
+  if [[ -n "${GATEWAY_NETWORK_FROM_ENV}" ]]; then
+    GATEWAY_NETWORK_NAME="${GATEWAY_NETWORK_FROM_ENV}"
+  fi
+fi
 
 if ! docker network inspect "$GATEWAY_NETWORK_NAME" >/dev/null 2>&1; then
   echo "Creating external gateway network: $GATEWAY_NETWORK_NAME"
